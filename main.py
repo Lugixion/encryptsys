@@ -1,47 +1,63 @@
 from os import system
+from tkinter import *
+from random import randint
+import string
+
+root = Tk()
 
 def encrypt():
-    from random import randint
-    import string
+    def getfintext(texto):
+        abecedario = string.printable + "áéíóúÁÉÍÚÓàèìòùÀÈÌÒÙäëïöüÄËÏÖÜñÑ´"
+        abecedario2 = []
+        nummoves = randint(1, 26)
+        indexs = []
 
-    texto = input("Introduzca el texto a encriptar : ")
-    abecedario = string.printable + "áéíóúÁÉÍÚÓàèìòùÀÈÌÒÙäëïöüÄËÏÖÜñÑ´"
-    abecedario2 = []
-    nummoves = randint(1, 26)
-    indexs = []
+        texttoenc = []
 
-    texttoenc = []
+        for l in range(0, len(abecedario)):
+            abecedario2.append(abecedario[l])
 
-    for l in range(0, len(abecedario)):
-        abecedario2.append(abecedario[l])
+        for let in range(0, len(texto.get())):
+            texttoenc.append(texto.get()[let])
 
-    for let in range(0, len(texto)):
-        texttoenc.append(texto[let])
+        for letter in texto.get():
+            indexs.append(abecedario2.index(letter))
 
-    for letter in texto:
-        indexs.append(abecedario2.index(letter))
+        for move in range(0, nummoves):
+            abecedario2 += abecedario2.pop(0)
 
-    for move in range(0, nummoves):
-        abecedario2 += abecedario2.pop(0)
+        texto = []
 
-    texto = []
+        for i in range(0, len(indexs)):
+            texto.append(abecedario2[indexs[i]])
+            texto.append(".")
 
-    for i in range(0, len(indexs)):
-        texto.append(abecedario2[indexs[i]])
-        texto.append(".")
+        fintext = ""
 
-    fintext = ""
+        for letter2 in range(0, len(texto), 2):
+            fintext += texto[letter2]
 
-    for letter2 in range(0, len(texto), 2):
-        fintext += texto[letter2]
+        fintext = str(nummoves) + "." + fintext
 
-    fintext = str(nummoves) + "." + fintext
+        final = Label(root, text="Texto encriptado: " + fintext, bg="black", fg="white")
+        final.pack()
 
-    print("\nTexto encriptado : " + fintext)
+    but1.destroy()
+    lab1.destroy()
+    but2.destroy()
 
+    global lab
+
+    lab = Label(root, text="Introduzca el texto a encriptar : ", bg="black", fg="white")
+    lab.pack(fill=X)
+
+    entry = Entry(root)
+    entry.pack()
+
+    execute = Button(root, text="Encriptar", command=lambda: getfintext(entry))
+    execute.pack(fill=X)
 
 def decrypt():
-    import string
 
     texto = input("Introduzca el texto a desencriptar : ").split(".")
     abecedario = string.printable + "áéíóúÁÉÍÚÓàèìòùÀÈÌÒÙäëïöüÄËÏÖÜñÑ´"
@@ -75,12 +91,17 @@ def decrypt():
 
     print(textofin)
 
-sel = input("Qué quieres hacer?\n\n[1] Encriptar\n[2] Desencriptar\n\n> ")
+global lab1
+global but1
+global but2
 
-system("clear")
-if sel == "1":
-    encrypt()
-elif sel == "2":
-    decrypt()
-else:
-    print("q")
+lab1 = Label(root, text="Encriptación de texto", bg="black", fg="white")
+lab1.pack(fill=X)
+
+but1 = Button(root, text="Encriptar", command=encrypt)
+but2 = Button(root, text="Desencriptar", command=decrypt)
+
+but1.pack(fill=X)
+but2.pack(fill=X)
+
+root.mainloop()
